@@ -18,54 +18,54 @@ function Login() {
   }
   console.log('LoginInfo ->', LoginInfo)
   const handleLogin = async (e) => {
-  e.preventDefault();
-  const { email, password } = LoginInfo;
+    e.preventDefault();
+    const { email, password } = LoginInfo;
 
-  if (!email || !password) {
-    return handleError('All fields are required');
-  }
-
-  if (password.length < 4) {
-    return handleError('Password must be at least 4 characters long');
-  }
-
-  try {
-    const url = "http://localhost:8080/auth/login";
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(LoginInfo)
-    });
-
-    const result = await response.json();
-    console.log(result);
-
-    if (result.success) {
-      localStorage.setItem("token", result.jwtToken);
-      localStorage.setItem("user", JSON.stringify(result.user)); 
-
-      toast.success(result.message || "Login successful!");
-      setTimeout(() => {
-        navigate('/home');
-      }, 1000);
-
-    
-      setLoginInfo({ email: '', password: '' });
-    } else {
-      handleError(result.message || "Login failed");
+    if (!email || !password) {
+      return handleError('All fields are required');
     }
-  } catch (err) {
-    handleError(err);
-  }
-};
+
+    if (password.length < 4) {
+      return handleError('Password must be at least 4 characters long');
+    }
+
+    try {
+      const url = "https://login-t5nk.onrender.com/auth/login";
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(LoginInfo)
+      });
+
+      const result = await response.json();
+      console.log(result);
+
+      if (result.success) {
+        localStorage.setItem("token", result.jwtToken);
+        localStorage.setItem("user", JSON.stringify(result.user));
+
+        toast.success(result.message || "Login successful!");
+        setTimeout(() => {
+          navigate('/home');
+        }, 1000);
+
+
+        setLoginInfo({ email: '', password: '' });
+      } else {
+        handleError(result.message || "Login failed");
+      }
+    } catch (err) {
+      handleError(err);
+    }
+  };
 
   return (
     <div className='container'>
       <h1>Login</h1>
       <form onSubmit={handleLogin}>
-        
+
         <div>
           <label htmlFor='email'>Email</label>
           <input
